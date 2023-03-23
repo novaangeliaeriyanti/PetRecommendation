@@ -1,0 +1,13 @@
+bg : R 255 G 250 B 245 #fffaf5
+bg-1 : R 254 G 245 B 238 #fef5ee
+bg-2 tosca: R 138 G 225 B 209 #8ae1d1
+bg-4 abu: R 116 G 106 B 104 #746a68
+bg-5 biru: R 198 G 226 B 250 #c6e2fa
+bg-6 oren: R 255 G 150 B 116 #FFC23F
+bg-7 pink: R 252 G 203 B 222 #fccbde
+l : R 176 G 175 B 196 #b0afc4
+l1 : R 138 G 225 B 209
+H : R 20 G 9 B 88 #140958
+H1: R 103 G 105 B 139 #67698b
+
+we beliece finding a reliable, prodessional pet itter should be eadsy. so make sure every member of our family
