@@ -11,6 +11,8 @@ import {
 import { useLocation } from "react-router-dom";
 import * as Yup from "yup";
 import CreateSuccess from "./CreateSuccess";
+import { Menu, Transition } from "@headlessui/react";
+import { Select, Option } from "@material-tailwind/react";
 
 export default function DetailPage() {
   const [totalTalent, setTotalTalent] = useState(0);
@@ -41,14 +43,13 @@ export default function DetailPage() {
 
   const onCheckHabitat = (item) => (event) => {
     let status = event.target.checked;
-    let tampung = [status, item];
-
-    if (tampung[0] === true) {
-      setHabitatCheck([...habitatCheck, item]);
-    } else {
-      const filterdTalent = habitatCheck.filter((hab) => hab !== item);
-      setHabitatCheck([...filterdTalent]);
+    console.log(status);
+    console.log(item);
+    if (status === true) {
+      setHabitatCheck([item]);
     }
+
+    console.log(habitatCheck);
   };
 
   const onCheckCriteria = (item) => (event) => {
@@ -61,6 +62,8 @@ export default function DetailPage() {
       const filterdTalent = criteriaCheck.filter((crite) => crite !== item);
       setCriteriaCheck([...filterdTalent]);
     }
+
+    console.log(criteriaCheck);
   };
 
   const validationSchema = Yup.object().shape({
@@ -76,53 +79,14 @@ export default function DetailPage() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      if (habitatCheck.length === 0) {
-        console.log("habitat kosong");
-      } else {
-        // const animalsList = [];
-        // const critetableList = [...critetable[0]];
-        // const petList = [];
+      console.log(values);
+      // if (habitatCheck.length === 0) {
+      //   console.log("habitat kosong");
+      // } else {
 
-        // for (let i = 0; i < habitatCheck.length; i++) {
-        //   for (let j = 0; j < critetableList.length; j++) {
-        //     if (talentCheck[i] === critetableList[j].crite_name) {
-        //       const animalsData = [];
-        //       animalsData.push(critetableList[j].crite_pet_id, talentCheck[i]);
-        //       animalsList.push(animalsData);
-        //       petList.push(critetableList[j].crite_pet_id);
-        //     }
-        //   }
-        // }
-
-        // let pet_candidat = [...new Set(petList)];
-        // let pet_recom_count = [];
-
-        // for (let k = 0; k < pet_candidat.length; k++) {
-        //   let animalCount = 0;
-        //   let pet = {};
-        //   for (let j = 0; j < petList.length; j++) {
-        //     if (pet_candidat[k] === petList[j]) {
-        //       animalCount = animalCount + 1;
-        //     }
-        //   }
-        //   pet = { pet_id: pet_candidat[k], pet_score: animalCount };
-        //   pet_recom_count.push(pet);
-        // }
-
-        // const pet_sort = pet_recom_count.sort(
-        //   (a, b) => parseFloat(a.pet_score) + parseFloat(b.pet_score)
-        // );
-
-        // if (pet_sort[0].pet_score);
-        // let pet_result = pet_sort[0];
-        // const pet_recommendation = allpet[0].filter(
-        //   (values) => values.pet_id === pet_result.pet_id
-        // );
-        // console.log(pet_sort);
-        //setPetRecommendationData(pet_recommendation);
-        setUserName(values.user_name);
-        setIsOpen(true);
-      }
+      //   setUserName(values.user_name);
+      //   setIsOpen(true);
+      // }
     },
   });
 
@@ -238,7 +202,7 @@ export default function DetailPage() {
               <h3>Habitat</h3>
             </div>
 
-            <div className="flex flex-wrap justify-between mx-40 items-center">
+            {/* <div className="flex flex-wrap justify-between mx-40 items-center">
               {(bootcamps[0] || []).map((hab) => (
                 <label class="relative flex w-56 mt-12 mb-10 bg-none items-center hover:scale-105">
                   <input
@@ -284,10 +248,19 @@ export default function DetailPage() {
                   </div>
                 </label>
               ))}
+            </div> */}
+            <div className="w-72">
+              <Select label="Select Version">
+                <Option>Material Tailwind HTML</Option>
+                <Option>Material Tailwind React</Option>
+                <Option>Material Tailwind Vue</Option>
+                <Option>Material Tailwind Angular</Option>
+                <Option>Material Tailwind Svelte</Option>
+              </Select>
             </div>
 
             <div className="flex justify-center">
-              <h3>Criteria</h3>
+              <h3>Criteria1</h3>
             </div>
 
             <div className="flex flex-wrap justify-between mx-40 items-center">
