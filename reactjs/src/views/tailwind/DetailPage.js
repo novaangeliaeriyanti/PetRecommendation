@@ -1,22 +1,27 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate, NavLink, Link } from "react-router-dom";
 import { useFormik } from "formik";
+import ReactDOM from "react-dom";
+
 //import redux needed
 import { useDispatch, useSelector } from "react-redux";
 import {
   doGetBootcampRequest,
   doGetCriteTableRequest,
   doGetPetRequest,
+  doAddCollectRequest,
 } from "../../redux-saga/actions/CampDetailAction";
 import { useLocation } from "react-router-dom";
 import * as Yup from "yup";
 import CreateSuccess from "./CreateSuccess";
 import { Menu, Transition } from "@headlessui/react";
-import { Select, Option } from "@material-tailwind/react";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 export default function DetailPage() {
-  const [totalTalent, setTotalTalent] = useState(0);
-  const [habitatCheck, setHabitatCheck] = useState([]);
   const [criteriaCheck, setCriteriaCheck] = useState([]);
   const [petRecommendationData, setPetRecommendationData] = useState([]);
   const [userName, setUserName] = useState("");
@@ -41,17 +46,6 @@ export default function DetailPage() {
     dispatch(doGetPetRequest(id));
   }, [id]);
 
-  const onCheckHabitat = (item) => (event) => {
-    let status = event.target.checked;
-    console.log(status);
-    console.log(item);
-    if (status === true) {
-      setHabitatCheck([item]);
-    }
-
-    console.log(habitatCheck);
-  };
-
   const onCheckCriteria = (item) => (event) => {
     let status = event.target.checked;
     let tampung = [status, item];
@@ -62,8 +56,6 @@ export default function DetailPage() {
       const filterdTalent = criteriaCheck.filter((crite) => crite !== item);
       setCriteriaCheck([...filterdTalent]);
     }
-
-    console.log(criteriaCheck);
   };
 
   const validationSchema = Yup.object().shape({
@@ -75,20 +67,42 @@ export default function DetailPage() {
   const formik = useFormik({
     initialValues: {
       user_name: "",
-      crite_name: "",
+      hab_name: "",
     },
+
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      // if (habitatCheck.length === 0) {
-      //   console.log("habitat kosong");
-      // } else {
+      const username = values.user_name;
+      const habitat = [values.hab_name];
+      const criteria = criteriaCheck;
 
-      //   setUserName(values.user_name);
-      //   setIsOpen(true);
-      // }
+      dispatch(
+        doAddCollectRequest({
+          username,
+          habitat,
+          criteria,
+        })
+      );
     },
   });
+
+  // React State
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    // Access count value from session storage
+    var pageView = sessionStorage.getItem("pageView");
+    if (pageView == null) {
+      // Initialize page views count
+      pageView = 1;
+    } else {
+      // Increment count
+      pageView = Number(pageView) + 1;
+    }
+    // Update session storage
+    sessionStorage.setItem("pageView", pageView);
+    setCount(pageView);
+  }, []); //No dependency to trigger in each page load
 
   return (
     <>
@@ -179,12 +193,20 @@ export default function DetailPage() {
           </div>
         </div>
 
-        {/* CARD CRITERIA */}
         <div className="flex">
           <form method="POST" action="#">
-            <div class="flex mx-40  md:mb-0 justify-center">
+            <div className="app">
+              <div>Page View Count is:</div>
+              {count}
+            </div>
+
+            {/* CARD NAME*/}
+            <div className="flex justify-center">
+              <h3>Hello,</h3>
+            </div>
+            <div class="mx-40  md:mb-0 justify-center">
               <input
-                class="block w-1/3 text-gray-800 rounded-lg bg-white appearance-none border border-gray-500 hover:border-gray-500 px-4 py-2 focus:bg-blue-100 focus:outline-none focus:shadow-outline"
+                class="block w-full text-gray-800 rounded-lg bg-white appearance-none border border-gray-500 hover:border-gray-500 px-4 py-2 focus:bg-blue-100 focus:outline-none focus:shadow-outline"
                 placeholder="Enter Your Name"
                 id="user_name"
                 name="user_name"
@@ -198,69 +220,32 @@ export default function DetailPage() {
               ) : null}
             </div>
 
+            {/* CARD HABITAT*/}
             <div className="flex justify-center">
-              <h3>Habitat</h3>
+              <h3>Pet's Habitat</h3>
             </div>
 
-            {/* <div className="flex flex-wrap justify-between mx-40 items-center">
-              {(bootcamps[0] || []).map((hab) => (
-                <label class="relative flex w-56 mt-12 mb-10 bg-none items-center hover:scale-105">
-                  <input
-                    type="checkbox"
-                    class="left-0 top-0 w-56 h-full hidden sr-only peer rounded-md"
-                    name="crite_name"
-                    id="crite_name"
-                    onClick={onCheckHabitat(hab.hab_id)}
-                  />
-                  <div class="absolute p-5 flex items-center drop-shadow-lg bg-amber-100  w-11/12 duration-300 ease-in-out rounded-lg peer-checked:bg-emerald-200">
-                    <div className="flex w-3/4 ml-14 items-end">
-                      <div className="w-full">
-                        <h1 className=" mb-1 truncate w-28 text-gray-800">
-                          {hab.hab_name}
-                        </h1>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="absolute flex flex-1 justify-end ml-40 peer-checked:rotate-45 duration-300 peer-checked:block items-center">
-                    <div className="w-full ">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-8 "
-                        viewBox="0 0 20 20"
-                        fill="#8a8a8a"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="absolute ml-2 mr-2 w-16 h-16 border border-gray-400 rounded-full duration-300 ease-in-out bg-orange-300 flex items-center justify-center peer-checked:bg-emerald-400">
-                    <img
-                      className=" w-16 h-16 border border-gray-400 rounded-full"
-                      src={`/storages/${hab.hab_url_image}`}
-                      alt=""
-                    />
-                  </div>
-                </label>
-              ))}
-            </div> */}
-            <div className="w-72">
-              <Select label="Select Version">
-                <Option>Material Tailwind HTML</Option>
-                <Option>Material Tailwind React</Option>
-                <Option>Material Tailwind Vue</Option>
-                <Option>Material Tailwind Angular</Option>
-                <Option>Material Tailwind Svelte</Option>
-              </Select>
+            <div className="mx-40  md:mb-0 justify-center">
+              <div class="relative">
+                <select
+                  class="block w-full text-gray-800 rounded-lg bg-white appearance-none border hover:border-gray-500 px-4 py-2 focus:bg-blue-100 focus:outline-none"
+                  name="hab_name"
+                  id="hab_name"
+                  value={formik.values.hab_name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  autoComplete="hab_name"
+                >
+                  {(bootcamps[0] || []).map((hab) => (
+                    <option value={hab.hab_name}>{hab.hab_name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
+            {/* CARD CRITERIA*/}
             <div className="flex justify-center">
-              <h3>Criteria1</h3>
+              <h3>Pet's Criteria</h3>
             </div>
 
             <div className="flex flex-wrap justify-between mx-40 items-center">
@@ -271,7 +256,7 @@ export default function DetailPage() {
                     class="left-0 top-0 w-56 h-full hidden sr-only peer rounded-md"
                     name="crite_name"
                     id="crite_name"
-                    onClick={onCheckCriteria(crite.crite_id)}
+                    onClick={onCheckCriteria(crite.crite_name)}
                   />
                   <div class="absolute p-5 flex items-center drop-shadow-lg bg-amber-100  w-11/12 duration-300 ease-in-out rounded-lg peer-checked:bg-emerald-200">
                     <div className="flex w-3/4 ml-14 items-end">
@@ -323,14 +308,14 @@ export default function DetailPage() {
           </form>
         </div>
       </div>
-      {isOpen ? (
+      {/* {isOpen ? (
         <CreateSuccess
           isOpen={isOpen}
           closeModal={() => setIsOpen(false)}
           petRecommendationData={petRecommendationData}
           userName={userName}
         />
-      ) : null}
+      ) : null} */}
     </>
   );
 }

@@ -32,6 +32,22 @@ export const doGetCriteTableFailed = (payload) => ({
   payload,
 });
 
+//COLLECT DATA
+export const doAddCollectRequest = (payload) => ({
+  type: ActionType.ADD_COLLECT_REQUEST,
+  payload,
+});
+
+export const doAddCollectSucceed = (payload) => ({
+  type: ActionType.ADD_COLLECT_SUCCEED ,
+  payload,
+});
+
+export const doAddCollectFailed = (payload) => ({
+  type: ActionType.ADD_COLLECT_FAILED ,
+  payload,
+});
+
 //PET TABLE
 export const doGetPetRequest = (payload) => ({
   type: ActionType.GET_PET_REQUEST,

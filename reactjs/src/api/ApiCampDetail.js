@@ -5,8 +5,6 @@ import config from "../config/config";
 const findAllCrite = async(id)=>{
     try {
         const result = await axios.get(`${config.domain}/crite/`);
-        // console.log(result.data);
-        // console.log("sudah sampai di apiCampDetail");
         return result.data;    
     } catch (error) {
         return error;
@@ -17,8 +15,18 @@ const findAllCrite = async(id)=>{
 const findAllHab = async(id)=>{
     try {
         const result = await axios.get(`${config.domain}/habitat/`);
-        // console.log(result.data);
-        // console.log("sudah sampai di apiCampDetail");
+        return result.data;    
+    } catch (error) {
+        return error;
+    }
+}
+
+//RESULT DATA
+const createResult = async(payload)=>{
+    try {
+        const result = await axios.post(`${config.domain}/result`, payload);
+        console.log(payload);
+        console.log("sudah sampai di apiCampDetail");
         return result.data;    
     } catch (error) {
         return error;
@@ -27,5 +35,6 @@ const findAllHab = async(id)=>{
 
 export default {
     findAllCrite,
-    findAllHab
+    findAllHab,
+    createResult
 }

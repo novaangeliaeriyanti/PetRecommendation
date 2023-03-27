@@ -10,11 +10,12 @@ import {
     doGetCriteTableSucceed,
     doGetCriteTableFailed,
     doGetPetSucceed,
-    doGetPetFailed
+    doGetPetFailed,
+    doAddCollectSucceed,
+    doAddCollectFailed
   } from "../actions/CampDetailAction";
   
   function* handleGetBootcamp(action) {
-    //console.log("sudah sampai di middleware");
     const { payload } = action;
     try {
       const result = yield call(apiCampDetail.findAllHab, payload);
@@ -37,7 +38,7 @@ import {
   }
 
   function* handleGetPet(action) {
-    console.log("sudah sampai di middleware");
+
     const { payload } = action;
     try {
       const result = yield call(apiCampDetail.findAll, payload);
@@ -46,6 +47,17 @@ import {
       yield put(doGetPetFailed(error));
     }
   }
+
+  function* handleAddCollect(action) {
+    console.log("sudah sampai di middleware add collect");
+    const { payload } = action;
+    try {
+      const result = yield call(apiCampDetail.createResult, payload);
+      yield put(doAddCollectSucceed(result));
+    } catch (error) {
+      yield put(doAddCollectFailed(error));
+    }
+  }
     
-  export { handleGetBootcamp,handleGetCriteTable,handleGetPet };
+  export { handleGetBootcamp,handleGetCriteTable,handleGetPet,handleAddCollect };
   

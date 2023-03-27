@@ -22,9 +22,6 @@ const BootcampReducer = (state = INIT_STATE, action) => {
 
 const applyGetBootcampSucceed = (state, action) => {
   let result = [action.payload]
-  console.log(result);
-  //let hasil = [...result]
-
   return {
     ...state,
     bootcamps: result,

@@ -250,7 +250,10 @@ const addRecommendationResult = async (req, res, next) => {
       res_pet_id: result_recommendation[1].dataValues.pet_id,
     });
 
-    return res.send(result_recommendation);
+    const resid = result_data.res_id
+    console.log(resid);
+    return res.send(resid);
+
   } catch (error) {
     return res.send(error);
   }
