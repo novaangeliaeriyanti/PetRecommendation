@@ -25,9 +25,8 @@ const findAllHab = async(id)=>{
 const createResult = async(payload)=>{
     try {
         const result = await axios.post(`${config.domain}/result`, payload);
-        console.log(payload);
-        console.log("sudah sampai di apiCampDetail");
-        return result.data;    
+        //console.log(payload);
+        return result.data;         
     } catch (error) {
         return error;
     }

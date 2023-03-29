@@ -4,6 +4,9 @@ import { Dialog, Transition } from "@headlessui/react";
 
 export default function CreateSuccess(props) {
   let navigate = useNavigate();
+
+  // console.log("Ini adalah hasil props : ", props.result_data[1].pet_url_image);
+  // console.log("Ini adalah hasil props : ", props.result_data[1].pet_name);
   return (
     <div>
       <Transition appear show={true} as={Fragment}>
@@ -39,7 +42,7 @@ export default function CreateSuccess(props) {
                     as="h3"
                     className="flex justify-center text-lg font-medium leading-6 text-gray-900"
                   >
-                    Hello, {props.userName}
+                    Hello, {props.result_data[0]}
                   </Dialog.Title>
 
                   <div className="flex justify-center text-lg">
@@ -49,20 +52,20 @@ export default function CreateSuccess(props) {
                   <div className="my-2 ml-2 mr-2  duration-300 ease-in-out flex items-center justify-center peer-checked:bg-emerald-400">
                     <img
                       className=" w-28 h-28 border border-gray-400 rounded-full"
-                      src={`/public/assets/images/cat.png`}
+                      src={`/storages/${props.result_data[1].pet_url_image}`}
                       alt=""
                     />
                   </div>
 
                   <div className="flex justify-center font-bold">
-                    {props.petRecommendationData[0].pet_name}
+                    {props.result_data[1].pet_name}
                   </div>
 
                   <div className="flex space-x-52 mt-4">
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-lg w-28 py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-slate-900 bg-white border-slate-800 hover:bg-red-200 focus:outline-none"
-                      // onClick={() => navigate("/app/batch/new")}
+                      // onClick={() => navigate("/detail")}
                       onClick={props.closeModal}
                     >
                       OK

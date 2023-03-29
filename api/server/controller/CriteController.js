@@ -30,6 +30,18 @@ const findAllCriteria = async (req, res) => {
   }
 };
 
+const findOneCriteria = async (req, re,next) => {
+  try {
+
+    const result = await req.context.models.criteria.findOne({
+      where: { pet_id: req.body.pet_name },
+    });
+    return res.send(result);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
 export default {
   createCrite,
   findAllCriteria,

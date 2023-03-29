@@ -32,6 +32,7 @@ export default function DetailPage() {
   const { bootcamps } = useSelector((state) => state.bootcampState);
   const { critetable } = useSelector((state) => state.critetableState);
   const { allpet } = useSelector((state) => state.petState);
+  const {collect_data} = useSelector((state) => state.collectState)
   let [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -83,26 +84,10 @@ export default function DetailPage() {
           criteria,
         })
       );
+
+      setIsOpen(true);
     },
   });
-
-  // React State
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    // Access count value from session storage
-    var pageView = sessionStorage.getItem("pageView");
-    if (pageView == null) {
-      // Initialize page views count
-      pageView = 1;
-    } else {
-      // Increment count
-      pageView = Number(pageView) + 1;
-    }
-    // Update session storage
-    sessionStorage.setItem("pageView", pageView);
-    setCount(pageView);
-  }, []); //No dependency to trigger in each page load
 
   return (
     <>
@@ -195,10 +180,6 @@ export default function DetailPage() {
 
         <div className="flex">
           <form method="POST" action="#">
-            <div className="app">
-              <div>Page View Count is:</div>
-              {count}
-            </div>
 
             {/* CARD NAME*/}
             <div className="flex justify-center">
@@ -308,14 +289,14 @@ export default function DetailPage() {
           </form>
         </div>
       </div>
-      {/* {isOpen ? (
+      {isOpen ? (
         <CreateSuccess
           isOpen={isOpen}
           closeModal={() => setIsOpen(false)}
-          petRecommendationData={petRecommendationData}
-          userName={userName}
+          result_data={collect_data}
         />
-      ) : null} */}
+      ) : null}
+      
     </>
   );
 }

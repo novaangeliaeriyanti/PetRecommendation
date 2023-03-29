@@ -88,13 +88,13 @@ const recomResult = async (req, res,next) => {
       };
       final_score_habitat.push(score_habitat);
     }
-
+    
     //sort descending
     final_score_habitat.sort((a, b) => {
       return a.pet_id - b.pet_id;
     });
 
-    console.log("final score habitat: ", final_score_habitat);
+    // console.log("final score habitat: ", final_score_habitat);
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //score habitat
@@ -128,10 +128,10 @@ const recomResult = async (req, res,next) => {
       const { crite_id, crite_name, crite_lines } = an_crite[0].dataValues;
 
       const newCrite = crite_lines.map((el) => ({ ...el.dataValues }));
-      console.log(
-        "newcrite : ",
-        newCrite[newCrite.length - 1].critelines_weight
-      );
+      // console.log(
+      //   "newcrite : ",
+      //   newCrite[newCrite.length - 1].critelines_weight
+      // );
 
       // get biggest weight habitat
       newCrite.sort((a, b) => {
@@ -169,7 +169,7 @@ const recomResult = async (req, res,next) => {
         }
       }
     }
-    console.log("final score hab per criteriaa: ", final_score_crite);
+    // console.log("final score hab per criteriaa: ", final_score_crite);
     //final score habitat per animal
     let final_score_criteria = [];
     let pet_id2 = [...new Set(an_pet_id)];
@@ -195,7 +195,7 @@ const recomResult = async (req, res,next) => {
       return a.pet_id - b.pet_id;
     });
 
-    console.log("final score criteria: ", final_score_criteria);
+    // console.log("final score criteria: ", final_score_criteria);
 
     //perankingan
     let final_score = 0;
@@ -234,7 +234,7 @@ const recomResult = async (req, res,next) => {
 
     const data_final_result_pet = [username, result_pet];
     req.data_final_result_pet = data_final_result_pet;
-    // return res.send(data_final_result_pet);
+   
     next();
   } catch (error) {
     return res.status(404).json({ message: error.message });
@@ -243,16 +243,20 @@ const recomResult = async (req, res,next) => {
 
 const addRecommendationResult = async (req, res, next) => {
   const result_recommendation = req.data_final_result_pet;
-  console.log(result_recommendation[0]);
+  // console.log(result_recommendation[0]);
   try {
     const result_data = await req.context.models.recomendation_results.create({
       user_name: result_recommendation[0],
       res_pet_id: result_recommendation[1].dataValues.pet_id,
     });
 
-    const resid = result_data.res_id
-    console.log(resid);
-    return res.send(resid);
+    const { res_id,user_name,res_pet_id } = result_data.dataValues;
+    // console.log(res_pet_id);
+    // return res.send(result_data);
+
+    req.pet_id = res_pet_id;
+    req.user_name = user_name;
+    next();
 
   } catch (error) {
     return res.send(error);

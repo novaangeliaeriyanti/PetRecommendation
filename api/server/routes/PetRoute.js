@@ -28,6 +28,7 @@ router.post(
 );
 
 router.get("/:id", IndexController.PetCtrl.findPet);
+router.get("/", IndexController.PetCtrl.findAllPet);
 
 router.put("/:id",IndexController.PetCtrl.updatePet,IndexController.CriteLinesCtrl.updatePetLines);
 

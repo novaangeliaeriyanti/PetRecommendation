@@ -20,9 +20,10 @@ const CollectReducer = (state = INIT_STATE, action) => {
 };
 const applyAddCollectSucceed = (state, action) => {
   const hasil = action.payload;
+  console.log(hasil);
   return {
     state,
-    collect_data: state.collect_data,
+    collect_data: hasil,
   };
 };
 

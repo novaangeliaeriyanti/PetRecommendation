@@ -38,6 +38,29 @@ const addPet = async (req, res, next) => {
   }
 };
 
+const findAllPet = async (req, res) => {
+  try {
+    const result = await req.context.models.pets.findAll({
+      attributes: ["pet_name", "pet_desc", "pet_url_image"],
+      include: [
+        {
+          model: req.context.models.hab_lines,
+          as: "hab_lines",
+          attributes: ["hablines_hab_id", "hablines_weight"],
+        },
+        {
+          model: req.context.models.crite_lines,
+          as: "crite_lines",
+          attributes: ["critelines_crite_id", "critelines_weight"],
+        },
+      ],
+    });
+    return res.send(result);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
 const findPet = async (req, res) => {
   try {
     const result = await req.context.models.pets.findAll({
@@ -57,6 +80,34 @@ const findPet = async (req, res) => {
       ],
     });
     return res.send(result);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
+const findPetResult = async (req, res,next) => {
+  try {
+    const result_recommendation = req.pet_id;
+    const username = req.user_name;
+    const result = await req.context.models.pets.findAll({
+      attributes: ["pet_name", "pet_desc", "pet_url_image"],
+      where: { pet_id: result_recommendation },
+      include: [
+        {
+          model: req.context.models.hab_lines,
+          as: "hab_lines",
+          attributes: ["hablines_hab_id", "hablines_weight"],
+        },
+        {
+          model: req.context.models.crite_lines,
+          as: "crite_lines",
+          attributes: ["critelines_crite_id", "critelines_weight"],
+        },
+      ],
+    });
+    
+    let pet_data = [username,...result]
+    return res.send(pet_data);
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
@@ -94,5 +145,7 @@ export default {
   createPet,
   findPet,
   updatePet,
-  addPet
+  addPet,
+  findPetResult,
+  findAllPet
 };
